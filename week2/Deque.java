@@ -46,9 +46,11 @@ public class Deque<Item> implements Iterable<Item> {
         n.prev = null;
         n.next = oldFirst;
 
+
         if (size == 0) {
             // First insert, the first node is also the last node.
             last = n;
+            n.next = null;  // Don't know why need to explicitly set?
         } else {
             // Update the reverse link
             oldFirst.prev = n;
@@ -82,10 +84,15 @@ public class Deque<Item> implements Iterable<Item> {
         }
         Item thing = first.item;  // Retrieve item
         size--;  // Decrement size and adjust pointer
-        first = first.next;  // If size is zero, this should properly point to null
-        first.prev = null;  // Update reverse direction
+        // System.out.println(first.item.toString() + "|" + first.next.item.toString());
+
+
         if (size == 0) {
+            first = null;
             last = null;  // Handle last case is null as well
+        } else {
+            first = first.next;  // If size is zero, this should properly point to null
+            first.prev = null;  // Update reverse direction
         }
 
         return thing;
@@ -97,10 +104,12 @@ public class Deque<Item> implements Iterable<Item> {
         }
         Item thing = last.item;
         size--;
-        last = last.prev;
-        last.next = null;
         if (size == 0) {
             first = null;
+            last = null;
+        } else {
+            last = last.prev;
+            last.next = null;
         }
 
         return thing;
@@ -191,6 +200,19 @@ public class Deque<Item> implements Iterable<Item> {
         for (Integer i : deque) {
             System.out.println(i);
         }
+
+        // RESET
+        while (!deque.isEmpty()) {
+            deque.removeLast();
+        }
+
+        System.out.println(deque.isEmpty());
+
+        System.out.println("");
+        deque.addFirst(2);
+        deque.addFirst(3);
+        System.out.println(deque.removeFirst());
+        System.out.println(deque.removeFirst());
 
     }
 }
